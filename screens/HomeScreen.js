@@ -8,15 +8,24 @@ import {
   View,
   Button,
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import QRActions from '../reducers/qr';
 import { auth } from '../config/firebase';
+import QRScanner from '../components/QRScanner';
 
-export default class HomeScreen extends React.Component {
+
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  componentWillReceiveProps(props) {
+    console.log("componentWillReceiveProps", props.qrState)
+  }
+
   getPlaces = () => {
-    const places = [1,2,1,1,1];
+    const places = [1, 2, 1, 1, 1];
     const goals = [];
     for (let i = 0; i < 10; i++) {
       if (i < places.length)
@@ -28,12 +37,22 @@ export default class HomeScreen extends React.Component {
   }
 
   scanQR = () => {
-    alert('click');
+    const { actions: {
+      showQrScanner,
+    } } = this.props;
+    showQrScanner(true);
   }
 
   closeSession = () => auth.signOut();
 
   render() {
+    const { actions: {
+      setQrData,
+      showQrScanner,
+    }, 
+    qrState: {
+      showQR
+    } } = this.props;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -45,16 +64,17 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.getStartedText}>¡Hola, Usuario!</Text>
           </View>
           <View style={styles.achievementContainer}>
-            <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{fontWeight: 'bold'}}>5/10</Text></Text>
+            <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{ fontWeight: 'bold' }}>5/10</Text></Text>
             <View style={styles.starContainer}>
               {this.getPlaces()}
             </View>
           </View>
-            <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
-              <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
-              <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
+            <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
+            <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
+          </TouchableOpacity>
         </ScrollView>
+        {showQR && <QRScanner setQrData={setQrData} showQrScanner={showQrScanner} {...this.props} />}
       </View>
     );
   }
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
   starImages: {
     width: 30,
     height: 30,
-    transform: [{rotate: '15 deg'}],
+    transform: [{ rotate: '15 deg' }],
   },
   tabBarInfoText: {
     fontSize: 18,
@@ -133,3 +153,21 @@ const styles = StyleSheet.create({
     height: 50,
   },
 });
+
+
+const mapStateToProps = state => ({
+  qrState: state.qr,
+});
+
+function mapDispatchToProps(dispatch) {
+  const allActions = {
+    ...QRActions,
+  };
+
+  return {
+    actions: bindActionCreators(allActions, dispatch),
+  };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
