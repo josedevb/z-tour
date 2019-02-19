@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Button,
+  ImageBackground,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,16 +15,34 @@ import QRActions from '../reducers/qr';
 import { auth } from '../config/firebase';
 import QRScanner from '../components/QRScanner';
 
-
 class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  state = {
+    name: '',
+    email: '',
+    uid: '',
+  }
+
   componentWillReceiveProps(props) {
     console.log("componentWillReceiveProps", props.qrState)
   }
 
+  nameUser = () => {
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        return user.email
+        // ...
+      } else {
+        // User is signed out.
+        // ...
+        return null
+      }
+    });
+
+  }
   getPlaces = () => {
     const places = [1, 2, 1, 1, 1];
     const goals = [];
@@ -49,33 +68,44 @@ class HomeScreen extends React.Component {
     const { actions: {
       setQrData,
       showQrScanner,
-    }, 
-    qrState: {
-      showQR
-    } } = this.props;
+    },
+      qrState: {
+        showQR
+      } } = this.props;
+
+
+
+
+
     return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Text style={styles.headerText}>Z-TOUR</Text>
-            <Button onPress={this.closeSession} color="black" title="CERRAR SESION" />
-          </View>
-          <View style={styles.mainTextContainer}>
-            <Text style={styles.getStartedText}>¡Hola, Usuario!</Text>
-          </View>
-          <View style={styles.achievementContainer}>
-            <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{ fontWeight: 'bold' }}>5/10</Text></Text>
-            <View style={styles.starContainer}>
-              {this.getPlaces()}
+      <ImageBackground
+        source={require('../assets/icons/home.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.headerText}>Z-TOUR</Text>
+              <Button onPress={this.closeSession} color="black" title="CERRAR SESION" />
             </View>
-          </View>
-          <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
-            <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
-            <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
-          </TouchableOpacity>
-        </ScrollView>
-        {showQR && <QRScanner setQrData={setQrData} showQrScanner={showQrScanner} {...this.props} />}
-      </View>
+            <View style={styles.mainTextContainer}>
+              <Text style={styles.getStartedText}>¡Hola,Usuario!</Text>
+            </View>
+            <View style={styles.achievementContainer}>
+              <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{ fontWeight: 'bold' }}>5/10</Text></Text>
+              <View style={styles.starContainer}>
+                {this.getPlaces()}
+              </View>
+            </View>
+            <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
+              <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
+              <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
+            </TouchableOpacity>
+          </ScrollView>
+          {showQR && <QRScanner setQrData={setQrData} showQrScanner={showQrScanner} {...this.props} />}
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -83,7 +113,6 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   headerText: {
     fontWeight: 'bold',
@@ -94,7 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 60,
     paddingHorizontal: 30,
-    backgroundColor: '#042777',
     justifyContent: 'space-between',
   },
   welcomeContainer: {
@@ -151,6 +179,11 @@ const styles = StyleSheet.create({
   camStyles: {
     width: 50,
     height: 50,
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
   },
 });
 

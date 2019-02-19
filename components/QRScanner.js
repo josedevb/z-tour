@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert } from 'react-native';
+import { Text, View, StyleSheet, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { Constants, BarCodeScanner, Permissions } from 'expo';
 
 export default class App extends Component {
@@ -35,11 +35,13 @@ export default class App extends Component {
 					<Text>Requesting for camera permission</Text> :
 					this.state.hasCameraPermission === false ?
 						<Text>Camera permission is not granted</Text> :
-						<BarCodeScanner
-							onBarCodeScanned={this.handleBarCodeScanned}
-							style={{ height: 200, width: 200 }}
-						/>
-				}
+						<View>
+							<BarCodeScanner
+								onBarCodeScanned={this.handleBarCodeScanned}
+								style={{ height: 200, width: 200 }}
+							/>
+						</View>
+}
 			</View>
 		);
 	}
@@ -52,6 +54,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		paddingTop: Constants.statusBarHeight,
 		backgroundColor: '#ecf0f1',
+		position: 'absolute',
+		width:'100%',
+		height: '100%',
 	},
 	paragraph: {
 		margin: 24,

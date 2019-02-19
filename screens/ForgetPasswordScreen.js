@@ -7,90 +7,100 @@ import {
   Text,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
+  ImageBackground,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { auth } from '../config/firebase';
+import InputField from "../components/InputField";
+import { w, h, totalSize } from '../api/Dimensions';
+
+const email = require('../assets/icons/email.png');
 
 export default class ForgetPasswordScreen extends React.Component {
+
   static navigationOptions = {
     header: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      loading: false,
-    };
-  }
+  state = {
+    isEmailCorrect: false,
+  };
 
-  login = () => {
-    const { email, password } = this.state;
-    this.setState({ loading: true });
-    auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      this.setState({ loading: false });
-      this.props.navigation.navigate('App')
-    })
-    .catch(e => {
-      if(e.code === "auth/invalid-email") alert('Email invalido')
-      if(e.code === "auth/user-not-found") alert('Usuario no encontrado')
-      if(e.code === "auth/wrong-password") alert('Email o contraseña equivocada')
-      this.setState({ loading: false });
-    })
-  }
+  sendEmail = () => {
+    const email = this.email.getInputValue();
+    this.setState({
+      isEmailCorrect: email === '',
+    }, () => {
+      if (email !== '') {
+        this.sendEmailWithPassword(email);
+      } else {
+        console.warn('Enter correct e-mail address');
+      }
+    });
+  };
 
-  forgetPassword = () => this.props.navigation.navigate('ForgetPassword');
+  sendEmailWithPassword = (email) => {
+    Firebase.sendEmailWithPassword(email)
+      .then(result => {
+        if (result) this.props.navigation.navigate('Auth')();
+      });
+  };
 
-  signup = () => this.props.navigation.navigate('SignUp');
+  onFocusChanged = () => {
+    this.setState({ isEmailCorrect: this.email.getInputValue() === '' });
+  };
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.registerButtonContainer}>
-          <Button color="black" title="Registro" onPress={this.signup} />
+      <ImageBackground
+        source={require('../assets/icons/forgotPassword.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <View style={styles.ViewiconText}>
+            <Text style={styles.iconText}>Z-TOUR</Text>
+          </View>
+          <View style={styles.contenido}>
+            <Text style={styles.forgot}>Olvidaste tu Contraseña?</Text>
+            <InputField
+              placeholder="Email"
+              keyboardType="email-address"
+              error={this.state.isEmailCorrect}
+              returnKeyType="done"
+              blurOnSubmit={true}
+              focus={this.changeInputFocus}
+              ref={ref => this.email = ref}
+              icon={email}
+            />
+            <TouchableWithoutFeedback onPress={()=>this.sendEmail}>
+              <View style={styles.buttons}>
+                <Text style={styles.buttonText}>Enviar al Correo</Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Auth')}>
+              <View style={styles.buttons}>
+                <Text style={styles.buttonText}>{'<'} Regresar al Login</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
-        <View style={styles.logo}>
-          <Image style={styles.icon} source={require('../assets/images/ztour.png')}/>
-          <Text style={styles.iconText} >Z-TOUR</Text>
-        </View>
-        <View style={styles.inputsContainer}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#fff"
-            style={styles.textInput}
-            onChangeText={email => this.setState({email})}
-            value={this.state.text}
-            underlineColorAndroid="#fff"
-          />
-          <TextInput 
-            placeholder="Contraseña"
-            placeholderTextColor="#fff"
-            style={styles.textInput}
-            onChangeText={password => this.setState({password})}
-            value={this.state.text}
-            underlineColorAndroid="#fff"
-          />
-          <Button onPress={this.forgetPassword} title="OLVIDE MI CONTRASEÑA" color="black"/>
-        </View>
-        { !this.state.loading ?
-            <Button onPress={this.login} title="INICIAR SESION" color="black"/>
-          : <ActivityIndicator color="black"/>
-        }
-      </View>
-    );
+      </ImageBackground>
+    )
   }
-
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor: '#042777',
+    flex: 1,
+  },
+  contenido: {
+    flex: 9,
     paddingVertical: 60,
     paddingHorizontal: 40,
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   registerButtonContainer: {
     flex: 0.1,
@@ -117,5 +127,59 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     color: '#fff',
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+  },
+  iconText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    marginTop: 25,
+  },
+  ViewiconText: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: '#303030',
+    height: 53.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    marginBottom: 20,
+    width: '85%',
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+  },
+  forgot: {
+    color: '#ffffffEE',
+    textAlign: 'center',
+    fontSize: totalSize(2),
+    fontWeight: '600',
+  },
+  KeyboardAvoid: {
+    justifyContent: 'space-between',
+    flex: 1,
   },
 });
