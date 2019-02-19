@@ -1,15 +1,9 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, Image, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { database } from '../config/firebase';
 
-const goals = [
-	{
-		nombreLugar: 'Puente de maracaibo',
-		url: '',
-		descripcion: 'el puenteee'
-	}
-]
+const backButton = require('../assets/images/icons8-izquierda-en-cuadrado-480.png');
 
 class ScanPlace extends React.Component {
 	static navigationOptions = {
@@ -39,19 +33,24 @@ class ScanPlace extends React.Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.contentContainer}>
-				<View>
-					<Image resizeMode="cover" style={styles.image} source={{uri: achievement.imagenLugar}} />
-				</View>
-				<View>
-					<Text style={styles.placeName}>
-						{achievement.nombreLugar}
-					</Text>
-				</View>
-				<View>
-					<Text style={styles.placeDescription}>
-						{achievement.descripcion}
-					</Text>
-				</View>
+					<View style={styles.header}>
+						<TouchableOpacity onPress={() => this.props.navigation.navigate('App')}>
+							<Image style={styles.backButton} source={backButton} />
+						</TouchableOpacity>
+					</View>
+					<View>
+						<Image resizeMode="cover" style={styles.image} source={{ uri: achievement.imagenLugar }} />
+					</View>
+					<View>
+						<Text style={styles.placeName}>
+							{achievement.nombreLugar}
+						</Text>
+					</View>
+					<View>
+						<Text style={styles.placeDescription}>
+							{achievement.descripcion}
+						</Text>
+					</View>
 				</View>
 			</View>
 		);
@@ -80,16 +79,23 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 30,
 		backgroundColor: '#042777',
 		justifyContent: 'space-between',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	placeName: {
-		color:'#ffffff'
+		color: '#ffffff',
 	},
 	image: {
 		width: 150,
-		height: 150
+		height: 150,
 	},
 	placeDescription: {
-		color:'#ffffff'
-	}
+		color: '#ffffff',
+	},
+	backButton: {
+		width: 40,
+		height: 40,
+	},
+	header: {
+		alignSelf: 'flex-start',
+	},
 });
