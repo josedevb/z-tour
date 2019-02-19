@@ -8,6 +8,8 @@ import {
   View,
   Button,
   ImageBackground,
+  TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -86,8 +88,14 @@ class HomeScreen extends React.Component {
         <View style={styles.container}>
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.welcomeContainer}>
-              <Text style={styles.headerText}>Z-TOUR</Text>
-              <Button onPress={this.closeSession} color="black" title="CERRAR SESION" />
+              <View style={styles.ViewiconText}>
+                <Text style={styles.iconText}>Z-TOUR</Text>
+              </View>
+              <TouchableWithoutFeedback onPress={this.closeSession}>
+                <View style={styles.buttons}>
+                  <Text style={styles.buttonText}>Cerrar Sesion</Text>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
             <View style={styles.mainTextContainer}>
               <Text style={styles.getStartedText}>¡Hola,Usuario!</Text>
@@ -128,7 +136,6 @@ const styles = StyleSheet.create({
   welcomeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   getStartedContainer: {
     flex: 0.2,
@@ -184,6 +191,41 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: Dimensions.get('window').height <= 640 ? 40 : 53.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    marginBottom: 20,
+    width: 180,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+  },
+  iconText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#fff',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    marginTop: 20,
+    width: 125,
+  },
+  ViewiconText: {
+
   },
 });
 

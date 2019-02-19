@@ -57,4 +57,13 @@ export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
+},{
+  tabBarOptions: {
+    showLabel: false, // hide labels
+    activeTintColor: '#F8F8F8', // active icon color
+    inactiveTintColor: '#586589',  // inactive icon color
+    style: {
+        backgroundColor: '#171F33' // TabBar background
+    }
+}
 });

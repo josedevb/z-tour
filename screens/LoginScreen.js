@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 2,
     borderColor: '#fff',
-    backgroundColor: 'rgba(0,0,0,0.7)',
     paddingHorizontal: 5,
     paddingVertical: 5,
     marginTop: 25,
@@ -193,7 +192,6 @@ const styles = StyleSheet.create({
   buttons: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: '#303030',
     height: Dimensions.get('window').height <= 640 ? 40 : 53.3,
     alignItems: 'center',
     justifyContent: 'center',

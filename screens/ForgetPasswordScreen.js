@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 2,
     borderColor: '#fff',
-    backgroundColor: 'rgba(0,0,0,0.7)',
     paddingHorizontal: 5,
     paddingVertical: 5,
     marginTop: 25,
@@ -167,6 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 1,
     borderColor: 'white',
+    opacity: 0.8
   },
   buttonText: {
     color: 'white',

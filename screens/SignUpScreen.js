@@ -75,7 +75,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.nombre = ref}
                   icon={person}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Apellido"
                   autoCapitalize="words"
@@ -85,7 +85,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.nombre = ref}
                   icon={person}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Email"
                   keyboardType="email-address"
@@ -95,7 +95,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.email = ref}
                   icon={email}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Cédula"
                   keyboardType='numeric'
@@ -105,7 +105,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.dni = ref}
                   icon={person}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Telefono"
                   keyboardType='phone-pad'
@@ -115,7 +115,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.phone = ref}
                   icon={person}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Password"
                   error={this.state.isPasswordCorrect}
@@ -125,7 +125,7 @@ export default class SignUpScreen extends React.Component {
                   secureTextEntry={true}
                   icon={password}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
                 <InputField
                   placeholder="Repeat Password"
                   error={this.state.isRepeatCorrect}
@@ -137,7 +137,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.repeat = ref}
                   icon={repeat}
                 />
-                <View style={{height:5,}}></View>
+                <View style={{height:10,}}></View>
               </ScrollView>
             </View>
             <Button onPress={this.signup} title="REGISTRARSE" color="black" />
@@ -177,13 +177,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   iconText: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
     borderRadius: 20,
     borderWidth: 2,
     borderColor: '#fff',
-    backgroundColor: 'rgba(0,0,0,0.7)',
     paddingHorizontal: 5,
     paddingVertical: 5,
     marginTop: 25,
@@ -201,7 +200,6 @@ const styles = StyleSheet.create({
   buttons: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: '#303030',
     height: 53.3,
     alignItems: 'center',
     justifyContent: 'center',
