@@ -52,13 +52,13 @@ class ScanPlace extends React.Component {
 	}
 
 	chargedStateLogro = () => {
-		var newLogros1 = dataUser.logros1.map((valor, index) => {
+		var newLogros1 = this.state.dataUser.logros1.map((valor, index) => {
 			return index === (this.state.achievement.id - 1) ? 1 : valor
 		})
 		this.setState({
 			newLogros1,
 		})
-		return console.log('nuevo logro', this.state.newLogros1);
+		console.log('nuevo logro', this.state.newLogros1);
 	}
 
 	componentDidMount = async () => {
@@ -66,8 +66,8 @@ class ScanPlace extends React.Component {
 		this.loadStateAchievements(this.loadStateDataUser(this.chargedStateLogro))
 		//---------------------------------------------------//
 
-
-		
+         
+		 
 
 
 		// let obj = {
