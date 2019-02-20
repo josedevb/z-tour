@@ -10,12 +10,14 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import QRActions from '../reducers/qr';
-import { auth } from '../config/firebase';
+import { auth, database } from '../config/firebase';
 import QRScanner from '../components/QRScanner';
+import { __await } from 'tslib';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -28,8 +30,19 @@ class HomeScreen extends React.Component {
     uid: '',
   }
 
-  componentWillReceiveProps(props) {
+  componentDidReceiveProps(props) {
     console.log("componentWillReceiveProps", props.qrState)
+  }
+
+  componentDidMount() {
+    let userId = auth.currentUser.uid;
+    let ref = database.ref("usuario/" + userId);
+    ref.once("value")
+      .then((snapshot) => {
+        this.setState({
+          getDataBase: snapshot.val(),
+        })
+      });
   }
 
   nameUser = () => {
@@ -46,10 +59,10 @@ class HomeScreen extends React.Component {
 
   }
   getPlaces = () => {
-    const places = [1, 2, 1, 1, 1];
+    const places = this.state.getDataBase.logros1
     const goals = [];
     for (let i = 0; i < 10; i++) {
-      if (i < places.length)
+      if (places[i] > 0)
         goals.push(<Image style={styles.starImages} source={require('../assets/images/icons8-estrella-relleno-480.png')} />)
       else
         goals.push(<Image style={styles.starImages} source={require('../assets/images/icons8-estrella-480.png')} />)
@@ -75,44 +88,42 @@ class HomeScreen extends React.Component {
         showQR
       } } = this.props;
 
-
-
-
-
     return (
       <ImageBackground
         source={require('../assets/icons/home.png')}
         style={styles.background}
         resizeMode="cover"
       >
-        <View style={styles.container}>
-          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.welcomeContainer}>
-              <View style={styles.ViewiconText}>
-                <Text style={styles.iconText}>Z-TOUR</Text>
-              </View>
-              <TouchableWithoutFeedback onPress={this.closeSession}>
-                <View style={styles.buttons}>
-                  <Text style={styles.buttonText}>Cerrar Sesion</Text>
+        {this.state.getDataBase ?
+          <View style={styles.container}>
+            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+              <View style={styles.welcomeContainer}>
+                <View style={styles.ViewiconText}>
+                  <Text style={styles.iconText}>Z-TOUR</Text>
                 </View>
-              </TouchableWithoutFeedback>
-            </View>
-            <View style={styles.mainTextContainer}>
-              <Text style={styles.getStartedText}>¡Hola,Usuario!</Text>
-            </View>
-            <View style={styles.achievementContainer}>
-              <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{ fontWeight: 'bold' }}>5/10</Text></Text>
-              <View style={styles.starContainer}>
-                {this.getPlaces()}
+                <TouchableWithoutFeedback onPress={this.closeSession}>
+                  <View style={styles.buttons}>
+                    <Text style={styles.buttonText}>Cerrar Sesion</Text>
+                  </View>
+                </TouchableWithoutFeedback>
               </View>
-            </View>
-            <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
-              <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
-              <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
-            </TouchableOpacity>
-          </ScrollView>
-          {showQR && <QRScanner setQrData={setQrData} showQrScanner={showQrScanner} {...this.props} />}
-        </View>
+              <View style={styles.mainTextContainer}>
+                <Text style={styles.getStartedText}>¡Hola, {this.state.getDataBase.name}  {this.state.getDataBase.lastname}!</Text>
+              </View>
+              <View style={styles.achievementContainer}>
+                <Text style={styles.codeHighlightText}>Tus lugares obtenidos <Text style={{ fontWeight: 'bold' }}>{this.state.getDataBase.logros2}/10</Text></Text>
+                <View style={styles.starContainer}>
+                  {this.getPlaces()}
+                </View>
+              </View>
+              <TouchableOpacity style={styles.getStartedContainer} onPress={this.scanQR}>
+                <Text style={styles.tabBarInfoText}>Comienza tu aventura turistica escaneando el codigo Z-TOUR</Text>
+                <Image style={styles.camStyles} source={require('../assets/images/icons8-imágenes-de-google-48.png')} />
+              </TouchableOpacity>
+            </ScrollView>
+            {showQR && <QRScanner setQrData={setQrData} showQrScanner={showQrScanner} {...this.props} />}
+          </View> : <View style={styles.activity}><ActivityIndicator  size="large" color="white" /></View>
+        }
       </ImageBackground>
     );
   }
@@ -122,6 +133,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  activity:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    },
   headerText: {
     fontWeight: 'bold',
     color: '#ffffff',
@@ -203,7 +219,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     marginBottom: 20,
-    width: 180,
+    width: 140,
     marginTop: 20,
     borderWidth: 1,
     borderColor: 'white',
@@ -216,8 +232,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#fff',
-    borderRadius: 20,
-    borderWidth: 2,
     borderColor: '#fff',
     paddingHorizontal: 5,
     paddingVertical: 5,

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import InputField from "../components/InputField";
 import SeleccionarImagen from '../components/SeleccionarImagen'
+import { createFirebaseAccount } from '../config/firebase'
 
 const email = require('../assets/icons/email.png');
 const password = require('../assets/icons/password.png');
@@ -32,11 +33,56 @@ export default class SignUpScreen extends React.Component {
       email: '',
       phone: '',
       dni: '',
+      isNameCorrect: false,
+      isLastNameCorrect: false,
+      isEmailCorrect: false,
+      isDniCorrect: false,
+      isPasswordCorrect: false,
+      isPhoneCorrect: false,
+      isRepeatCorrect: false,
+      isCreatingAccount: false,
       loading: false,
     };
   }
 
   login = () => this.props.navigation.navigate('Auth')
+
+  createUserAccount = () => {
+    const name = this.name.getInputValue();
+    const lastname = this.lastname.getInputValue();
+    const email = this.email.getInputValue();
+    const dni = this.dni.getInputValue();
+    const phone = this.phone.getInputValue();
+    const password = this.password.getInputValue();
+    const repeat = this.repeat.getInputValue();
+
+    this.setState({
+      isNameCorrect: name === '',
+      isLastNameCorrect: lastname === '',
+      isEmailCorrect: email === '',
+      isDniCorrect: dni === '',
+      isPhoneCorrect: phone === '',
+      isPasswordCorrect: password === '',
+      isRepeatCorrect: repeat === '' || repeat !== password,
+    }, () => {
+      if (name !== '' && email !== '' && password !== '' && (repeat !== '' && repeat === password)) {
+        createFirebaseAccount(email,password, name, lastname,dni, phone)
+      } else {
+        alert('Existen Campos Vacios.');
+      }
+    })
+  };
+
+  createFireBaseAccount = (email,password,name, lastname,dni, phone) => {
+    this.setState({ isCreatingAccount: true });
+    createFirebaseAccount(email, password,name, lastname,dni, phone )
+      .then(result => {
+        if (result) {
+          alert('Exito al crear la Cuenta.')
+        }
+        this.setState({ isCreatingAccount: false });
+      });
+  };
 
   signup = () => {
 
@@ -65,27 +111,27 @@ export default class SignUpScreen extends React.Component {
             <View style={styles.inputsContainer}>
               <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                 <SeleccionarImagen />
-                <View style={{height:5,}}></View>
+                <View style={{ height: 5, }}></View>
                 <InputField
                   placeholder="Nombre"
                   autoCapitalize="words"
                   error={this.state.isNameCorrect}
                   style={styles.input}
                   focus={this.changeInputFocus}
-                  ref={ref => this.nombre = ref}
+                  ref={ref => this.name = ref}
                   icon={person}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Apellido"
                   autoCapitalize="words"
-                  error={this.state.isNameCorrect}
+                  error={this.state.isLastNameCorrect}
                   style={styles.input}
                   focus={this.changeInputFocus}
-                  ref={ref => this.nombre = ref}
+                  ref={ref => this.lastname = ref}
                   icon={person}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Email"
                   keyboardType="email-address"
@@ -95,7 +141,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.email = ref}
                   icon={email}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Cédula"
                   keyboardType='numeric'
@@ -105,7 +151,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.dni = ref}
                   icon={person}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Telefono"
                   keyboardType='phone-pad'
@@ -115,7 +161,7 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.phone = ref}
                   icon={person}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Password"
                   error={this.state.isPasswordCorrect}
@@ -125,7 +171,7 @@ export default class SignUpScreen extends React.Component {
                   secureTextEntry={true}
                   icon={password}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
                 <InputField
                   placeholder="Repeat Password"
                   error={this.state.isRepeatCorrect}
@@ -137,10 +183,10 @@ export default class SignUpScreen extends React.Component {
                   ref={ref => this.repeat = ref}
                   icon={repeat}
                 />
-                <View style={{height:10,}}></View>
+                <View style={{ height: 10, }}></View>
               </ScrollView>
             </View>
-            <Button onPress={this.signup} title="REGISTRARSE" color="black" />
+            <Button onPress={this.createUserAccount} title="REGISTRARSE" color="black" />
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>

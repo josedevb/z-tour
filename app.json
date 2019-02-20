@@ -3,14 +3,17 @@
     "name": "ZTour",
     "slug": "ZTour",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "31.0.0",
     "platforms": [
       "ios",
       "android"
     ],
+    "android": {
+      "package": "com.yourcompany.yourappname"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/ztour.ico",
+    "icon": "./assets/images/ztour.png",
     "splash": {
       "image": "./assets/images/Turismo_Splash_Screen-min.png",
       "resizeMode": "cover",

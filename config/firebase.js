@@ -13,3 +13,33 @@ firebase.initializeApp(firebaseConfig);
 
 export const database = firebase.database();
 export const auth = firebase.auth();
+
+export const createFirebaseAccount = (email, password, name, lastname, dni, phone) =>
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+            database.ref('usuario/' + user.user.uid).set({
+                name,
+                lastname,
+                email,
+                dni,
+                phone,
+                logros1: [0,0,0,0,0,0,0,0,0,0],
+                logros2: 0,
+                // profile_picture: imageUrl
+            });
+        })
+        .catch(error => {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    alert('This email address is already taken');
+                    break;
+                case 'auth/invalid-email':
+                    alert('Invalid e-mail address format');
+                    break;
+                case 'auth/weak-password':
+                    alert('Password is too weak');
+                    break;
+                default:
+                   return null
+            }
+        })

@@ -31,6 +31,11 @@ export default class App extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
+				<TouchableWithoutFeedback onPress={() => this.props.showQrScanner(false)}>
+					<View style={styles.buttons}>
+						<Text style={styles.buttonText}>Regregar Lobby</Text>
+					</View>
+				</TouchableWithoutFeedback>
 				{this.state.hasCameraPermission === null ?
 					<Text>Requesting for camera permission</Text> :
 					this.state.hasCameraPermission === false ?
@@ -41,7 +46,7 @@ export default class App extends Component {
 								style={{ height: 200, width: 200 }}
 							/>
 						</View>
-}
+				}
 			</View>
 		);
 	}
@@ -51,11 +56,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'space-around',
 		paddingTop: Constants.statusBarHeight,
-		backgroundColor: '#ecf0f1',
+		backgroundColor: '#171F33',
 		position: 'absolute',
-		width:'100%',
+		width: '100%',
 		height: '100%',
 	},
 	paragraph: {
@@ -64,5 +69,23 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 		color: '#34495e',
+	},
+	buttons: {
+		display: 'flex',
+		flexDirection: 'row',
+		height: Dimensions.get('window').height <= 640 ? 40 : 53.3,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderTopLeftRadius: 30,
+		borderTopRightRadius: 30,
+		borderBottomLeftRadius: 30,
+		borderBottomRightRadius: 30,
+		width: 180,
+		borderWidth: 1,
+		borderColor: 'white',
+	},
+	buttonText: {
+		color: 'white',
+		fontSize: 20,
 	},
 });

@@ -58,53 +58,53 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../assets/icons/login-min.png')}
+        source={require('../assets/icons/home.png')}
         style={styles.background}
         resizeMode="cover"
       >
         <View style={styles.container}>
-            <View style={styles.ViewiconText}>
-              <Text style={styles.iconText}>Z-TOUR</Text>
+          <View style={styles.ViewiconText}>
+            <Text style={styles.iconText}>Z-TOUR</Text>
+          </View>
+          <View style={styles.ViewRest} >
+            <View style={styles.icon}></View>
+            <Image style={styles.icon2} resizeMode="contain" source={ztour} />
+            <InputField
+              placeholder="Email"
+              keyboardType="email-address"
+              style={styles.email}
+              error={this.state.isEmailCorrect}
+              focus={this.changeInputFocus}
+              ref={ref => this.email = ref}
+              icon={email}
+            />
+            <InputField
+              placeholder="Password"
+              returnKeyType="done"
+              secureTextEntry={true}
+              blurOnSubmit={true}
+              error={this.state.isPasswordCorrect}
+              ref={ref => this.password = ref}
+              focus={this.changeInputFocus}
+              icon={password}
+            />
+            {!this.state.loading ?
+              <TouchableWithoutFeedback onPress={this.login}>
+                <View style={styles.buttons}>
+                  <Text style={styles.buttonText}>Iniciar Sesion</Text>
+                </View>
+              </TouchableWithoutFeedback>
+              : <ActivityIndicator color="white" />
+            }
+            <View style={styles.textContainer}>
+              <TouchableOpacity onPress={this.signup} style={styles.touchable} activeOpacity={0.6}>
+                <Text style={styles.createAccount}>Crear una cuenta.</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.forgetPassword} style={styles.touchable} activeOpacity={0.6}>
+                <Text style={styles.forgotPassword}>¿Olvidó su contraseña?</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.ViewRest} >
-              <Image style={styles.icon} resizeMode="contain" source={maracaiboLogo} />
-              <Image style={styles.icon2} resizeMode="contain" source={ztour} />
-              <InputField
-                placeholder="Email"
-                keyboardType="email-address"
-                style={styles.email}
-                error={this.state.isEmailCorrect}
-                focus={this.changeInputFocus}
-                ref={ref => this.email = ref}
-                icon={email}
-              />
-              <InputField
-                placeholder="Password"
-                returnKeyType="done"
-                secureTextEntry={true}
-                blurOnSubmit={true}
-                error={this.state.isPasswordCorrect}
-                ref={ref => this.password = ref}
-                focus={this.changeInputFocus}
-                icon={password}
-              />
-              {!this.state.loading ?
-                <TouchableWithoutFeedback onPress={this.login}>
-                  <View style={styles.buttons}>
-                    <Text style={styles.buttonText}>Iniciar Sesion</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                : <ActivityIndicator color="white" />
-              }
-              <View style={styles.textContainer}>
-                <TouchableOpacity onPress={this.signup} style={styles.touchable} activeOpacity={0.6}>
-                  <Text style={styles.createAccount}>Crear una cuenta.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.forgetPassword} style={styles.touchable} activeOpacity={0.6}>
-                  <Text style={styles.forgotPassword}>¿Olvidó su contraseña?</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+          </View>
         </View>
       </ImageBackground>
 
@@ -119,17 +119,18 @@ const styles = StyleSheet.create({
 
   },
   icon: {
-    width: Dimensions.get('window').width <= 360 ? w(50) : w(60),
-    height: h(30),
+    width: Dimensions.get('window').width <= 360 ? w(40) : w(50),
+    height: h(25),
     marginTop: h(10),
     marginBottom: h(7),
     opacity: 0.4,
-    borderRadius: 50,
+    borderRadius: 100,
+    backgroundColor: 'white',
 
   },
   icon2: {
     width: w(40),
-    height: h(30),
+    height: h(25),
     marginTop: h(10),
     marginBottom: h(7),
     position: 'absolute',
@@ -173,8 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#fff',
-    borderRadius: 20,
-    borderWidth: 2,
     borderColor: '#fff',
     paddingHorizontal: 5,
     paddingVertical: 5,
