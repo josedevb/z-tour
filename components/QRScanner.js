@@ -25,7 +25,7 @@ export default class App extends Component {
 		} = this.props;
 		setQrData(data);
 		showQrScanner(false);
-		this.props.navigation.navigate('PlacesScreen');
+		this.props.navigation.navigate('PlacesScreen', {usuarioData:this.props.usuarioData,usuarioActual:this.props.usuarioActual});
 	}
 
 	render() {
@@ -43,7 +43,7 @@ export default class App extends Component {
 						<View>
 							<BarCodeScanner
 								onBarCodeScanned={this.handleBarCodeScanned}
-								style={{ height: 200, width: 200 }}
+								style={{ height: 50, width: 150 }}
 							/>
 						</View>
 				}

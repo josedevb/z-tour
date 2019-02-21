@@ -116,7 +116,8 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    backgroundColor: '#171F33',
+    opacity: 0.8,
   },
   icon: {
     width: Dimensions.get('window').width <= 360 ? w(40) : w(50),
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   iconText: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
     borderColor: '#fff',

@@ -23,8 +23,10 @@ export const createFirebaseAccount = (email, password, name, lastname, dni, phon
                 email,
                 dni,
                 phone,
-                logros1: [0,0,0,0,0,0,0,0,0,0],
+                logros1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 logros2: 0,
+                logros3: [false, false, false, false, false, false, false, false, false, false],
+                logros4: false,
                 // profile_picture: imageUrl
             });
         })
@@ -40,6 +42,6 @@ export const createFirebaseAccount = (email, password, name, lastname, dni, phon
                     alert('Password is too weak');
                     break;
                 default:
-                   return null
+                    return null
             }
         })

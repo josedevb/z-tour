@@ -1,17 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, ImageBackground, ScrollView, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Image, Text, ImageBackground, ScrollView, Dimensions, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { database, auth } from '../config/firebase';
-
-const goals = [
-	{
-		nombreLugar: 'Puente de maracaibo',
-		url: '',
-		descripcion: 'el puenteee'
-	}
-]
-
-
 
 class ScanPlace extends React.Component {
 	static navigationOptions = {
@@ -20,54 +10,54 @@ class ScanPlace extends React.Component {
 
 	state = {
 		achievement: null,
+		changedIndex: true,
 	}
 
+	componentDidMount = async () => {
 
-	loadStateAchievements = (callback) => {
+		const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
+		this.setState({
+			usuarioData,
+		});
+		const usuarioActual = this.props.navigation.getParam('usuarioActual', 'cristiano')
+		console.log('usuarioData', usuarioData);
+
 		const { QRData } = this.props.qrState;
 		var placesRef = database.ref(`achievements/${QRData}`);
 		let vm = this;
 		placesRef.once('value', function (snapshot) {
 			if (snapshot.val() !== null) {
-				vm.setState({ achievement: snapshot.val() });
-				return callback
+				vm.setState({
+					achievement: snapshot.val(),
+					usuarioData,
+				});
+				if (usuarioData.logros3[snapshot.val().id - 1] === false) {
+					var newLogros1 = usuarioData.logros1.map((valor, index) => {
+						if ((index === (snapshot.val().id - 1))) {
+							return 1
+						} else {
+							return valor
+						}
+					})
+					var newLogros2 = usuarioData.logros3.map((valor, index) => {
+						return (index === (snapshot.val().id - 1) && valor === false) ? true : valor
+					})
 
+					database.ref().child('usuario/' + usuarioActual)
+						.update({ logros3: newLogros2, }).then(success => {
+							database.ref().child('usuario/' + usuarioActual)
+								.update({ logros1: newLogros1, logros2: (usuarioData.logros2 + 1), });
+						})
+				} else {
+					vm.setState({
+						changedIndex: false,
+					});
+				}
 			} else {
 				return alert("Lugar no encontrado")
 			}
 		});
-	}
 
-	loadStateDataUser = (callback) => {
-		let userId = auth.currentUser.uid;
-		let ref = database.ref("usuario/" + userId);
-		ref.once("value")
-			.then((snapshot) => {
-				this.setState({
-					dataUser: snapshot.val(),
-				})
-				console.log('datauser', this.state.dataUser);
-               return callback
-			});
-	}
-
-	chargedStateLogro = () => {
-		var newLogros1 = this.state.dataUser.logros1.map((valor, index) => {
-			return index === (this.state.achievement.id - 1) ? 1 : valor
-		})
-		this.setState({
-			newLogros1,
-		})
-		console.log('nuevo logro', this.state.newLogros1);
-	}
-
-	componentDidMount = async () => {
-
-		this.loadStateAchievements(this.loadStateDataUser(this.chargedStateLogro))
-		//---------------------------------------------------//
-
-         
-		 
 
 
 		// let obj = {
@@ -79,14 +69,13 @@ class ScanPlace extends React.Component {
 
 	}
 
-
 	render() {
 		const { achievement } = this.state;
 
 		if (!achievement) return null;
 		return (
 			<ImageBackground
-				source={require('../assets/icons/lugar.png')}
+				source={require('../assets/icons/home.png')}
 				style={styles.background}
 				resizeMode="cover"
 			>
@@ -107,14 +96,14 @@ class ScanPlace extends React.Component {
 								</Text>
 							</View>
 						</ScrollView>
-						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('App')}>
+						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AfterAchievement', { changedIndex: this.state.changedIndex })}>
 							<View style={styles.buttons}>
 								<Text style={styles.buttonText}>Regresar</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
 				</View>
-			</ ImageBackground>
+			</ ImageBackground >
 		);
 	}
 }
@@ -128,6 +117,8 @@ export default connect(mapStateToProps, null)(ScanPlace);
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: '#171F33',
+		opacity: 0.8,
 	},
 	headerText: {
 		fontWeight: 'bold',

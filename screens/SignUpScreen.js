@@ -198,6 +198,8 @@ export default class SignUpScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#171F33',
+    opacity: 0.8,
   },
   registerButtonContainer: {
     flexDirection: 'row',
