@@ -1,39 +1,40 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View , Image, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Image, Text, ImageBackground } from 'react-native';
 
-const goals = [
-  {
-    nombreLugar: 'Puente de maracaibo',
-    url: '',
-    descripcion: 'el puenteee'
-  }
-]
 
 export default class AchievementScreen extends React.Component {
   static navigationOptions = {
     title: null,
+    header: null,
   };
 
-  getAchievements = () => goals.map(e => (
-    <View>
+  getAchievements = () => {
+    const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
+
+    return <View>
       <View>
         <Image></Image>
         <Text></Text>
       </View>
       <View>
-        <Text></Text>
         <Image></Image>
       </View>
     </View>
-  ));
+  }
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          {this.getAchievements()}
-        </ScrollView>
-      </View>
+      <ImageBackground
+        source={require('../assets/icons/home.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            {this.getAchievements()}
+          </ScrollView>
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -41,18 +42,18 @@ export default class AchievementScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  headerText: {
-    fontWeight: 'bold',
-    color: '#ffffff',
-    fontSize: 25,
+    backgroundColor: '#171F33',
+    opacity: 0.8,
   },
   contentContainer: {
     flex: 1,
     paddingVertical: 60,
     paddingHorizontal: 30,
-    backgroundColor: '#042777',
     justifyContent: 'space-between',
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
   },
 });

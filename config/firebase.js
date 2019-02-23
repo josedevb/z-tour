@@ -27,6 +27,7 @@ export const createFirebaseAccount = (email, password, name, lastname, dni, phon
                 logros2: 0,
                 logros3: [false, false, false, false, false, false, false, false, false, false],
                 logros4: false,
+                likes: [false, false, false, false, false, false, false, false, false, false],
                 // profile_picture: imageUrl
             });
         })
