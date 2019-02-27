@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   getStartedContainer: {
-    flex: 0.2,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',

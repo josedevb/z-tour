@@ -57,78 +57,78 @@ class ScanPlace extends React.Component {
 
 	componentDidMount = async () => {
 
-		const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
-		this.setState({
-			usuarioData,
-		});
-		const usuarioActual = this.props.navigation.getParam('usuarioActual', 'cristiano')
+		//const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
+		//this.setState({
+		//	usuarioData,
+		//});
+		//const usuarioActual = this.props.navigation.getParam('usuarioActual', 'cristiano')
 		const { QRData } = this.props.qrState;
 		this.setState({
 			QRData,
 		})
-		var placesRef = database.ref(`achievements/${QRData}`);
-		let vm = this;
-		placesRef.once('value', function (snapshot) {
-			if (snapshot.val() !== null) {
-				vm.setState({
-					achievement: snapshot.val(),
-					usuarioData,
-				});
-				vm.buscarElmasCercano()
-				const activo = vm.selectCoordinate()
-				vm.setState({ activo })
-				const heartss = vm.state.usuarioData.likes
-				const achievementX = vm.state.achievement.map
-				if (heartss[achievementX]) {
-					vm.setState({
-						heart: true
-					});
-				} else {
-					vm.setState({
-						heart: false
-					});
-				}
-				// console.log(heartss);
-				if (usuarioData.logros3[snapshot.val().id - 1] === false) {
-					var newLogros1 = usuarioData.logros1.map((valor, index) => {
-						if ((index === (snapshot.val().id - 1))) {
-							return 1
-						} else {
-							return valor
-						}
-					})
-					var newLogros2 = usuarioData.logros3.map((valor, index) => {
-						return (index === (snapshot.val().id - 1) && valor === false) ? true : valor
-					})
-
-					database.ref().child('usuario/' + usuarioActual)
-						.update({ logros3: newLogros2, }).then(success => {
-							database.ref().child('usuario/' + usuarioActual)
-								.update({ logros1: newLogros1, logros2: (usuarioData.logros2 + 1), });
-						})
-				} else {
-					vm.setState({
-						changedIndex: false,
-					});
-				}
-			} else {
-				return vm.setState({
-					achievement: {
-						descripcion: "En 1686 el capitán Juan de las Nieves Andrade construye una ermita de barro y paja en honor a San Juan de Dios de quien era devoto. En 1709 ocurre el milagro de la restauración de la tablita. Una humilde señora encuentra la tablita a orillas del Lago de Maracaibo y la coloca como tapa de una tinaja, luego escuchó un golpeteo y unas luces que venían de su casa y al entrar encontró en la tablita la imagen resplandeciente de la Virgen y el niño junto a San Antonio y San Andrés. La imagen en la tablita se convirtió en objeto de peregrinación para los devotos, y la tablita fue trasladada a la ermita de San Juan de Dios, (actual Basílica).  Es una obra arquitectónica representativa de la ciudad de Maracaibo y del estado Zulia, es mencionada en canciones de Gaita zuliana además de estar presente en postales, cuadros, y otras manifestaciones.",
-						id: 1,
-						imagenLugar: "https://firebasestorage.googleapis.com/v0/b/ztourapp-8df03.appspot.com/o/achivementsPictures%2FBasi%CC%81lica%20de%20Nuestra%20Sen%CC%83ora%20de%20Chiquinquira%CC%81%C2%A0.jpg?alt=media&token=bdcd0e84-07a2-450f-b153-d8ee6afecde4",
-						likes: 0,
-						nombreLugar: "Basílica de Nuestra Señora de Chiquinquirá",
-						map: 0,
-					}
+		//		var placesRef = database.ref(`achievements/${QRData}`);
+		let usuarioActual = auth.currentUser.uid;
+		let ref = database.ref("usuario/" + usuarioActual);
+		ref.once("value")
+			.then((snapshot) => {
+				this.setState({
+					usuarioData: snapshot.val(),
+					usuarioActual,
 				})
-				//alert("Lugar no encontrado")
-			}
-		});
+			}).then((success) => {
+				var placesRef = database.ref(`achievements/lugar1`);
+				let vm = this;
+				placesRef.once('value', function (snapshot) {
+					if (snapshot.val() !== null) {
+						vm.setState({
+							achievement: snapshot.val(),
+						});
+						vm.buscarElmasCercano()
+						const activo = vm.selectCoordinate()
+						vm.setState({ activo })
+						const heartss = vm.state.usuarioData.likes
+						const achievementX = vm.state.achievement.map
+						if (heartss[achievementX]) {
+							vm.setState({
+								heart: true
+							});
+						} else {
+							vm.setState({
+								heart: false
+							});
+						}
+						// console.log(heartss);
+						if (vm.state.usuarioData.logros3[snapshot.val().id - 1] === false) {
+							var newLogros1 = vm.state.usuarioData.logros1.map((valor, index) => {
+								if ((index === (snapshot.val().id - 1))) {
+									return 1
+								} else {
+									return valor
+								}
+							})
+							var newLogros2 = vm.state.usuarioData.logros3.map((valor, index) => {
+								return (index === (snapshot.val().id - 1) && valor === false) ? true : valor
+							})
+
+							database.ref().child('usuario/' + usuarioActual)
+								.update({ logros3: newLogros2, }).then(success => {
+									database.ref().child('usuario/' + usuarioActual)
+										.update({ logros1: newLogros1, logros2: (vm.state.usuarioData.logros2 + 1), });
+								})
+						} else {
+							vm.setState({
+								changedIndex: false,
+							});
+						}
+					} else {
+						alert("Lugar no encontrado")
+					}
+				});
+			})
 	}
 
 	onRegionChange = (region) => {
-		this.setState({ region });
+		region=region
 	}
 
 	selectRegion = () => {
@@ -237,12 +237,12 @@ class ScanPlace extends React.Component {
 				database.ref().child('usuario/' + userId)
 					.update({ likes: likess, })
 				if (this.state.achievement.likes >= 0) {
-					database.ref().child('achievements/' + this.state.QRData)
+					database.ref().child('achievements/lugar1' /*+ this.state.QRData*/)
 						.update({ likes: (this.state.achievement.likes + contador) })
 					vm.setState({ heart: !this.state.heart })
 				}
 			}).then((success) => {
-				var placesRef = database.ref('achievements/' + this.state.QRData);
+				var placesRef = database.ref('achievements/lugar1' /*+ this.state.QRData*/);
 				let vm = this;
 				placesRef.once('value', function (snapshot) {
 					if (snapshot.val() !== null) {
@@ -259,14 +259,14 @@ class ScanPlace extends React.Component {
 		const staticCoordinate = this.selectCoordinate()
 		const latitude = staticCoordinate.latitude
 		const longitude = staticCoordinate.longitude
-		var cero = 5
+		var cero = 999999
 		const restantes = this.state.usuarioData.logros3.map((value, index) => {
 			let staticCoordinate2 = this.selectCoordinate2(index)
 			// console.log('staticCoordinate2', staticCoordinate2);
 			let latitude2 = staticCoordinate2.latitude
 			let longitude2 = staticCoordinate2.longitude
 			let distanciaa = this.distance(latitude, longitude, latitude2, longitude2)
-			if (distanciaa > 0 && distanciaa < cero) {
+			if (distanciaa > 0 && distanciaa < cero && value===false) {
 				cero = distanciaa
 				this.setState({
 					puntoFinal: this.selectCoordinate2(index)
@@ -344,7 +344,7 @@ class ScanPlace extends React.Component {
 								</Text>
 							</View>
 						</View>
-						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AfterAchievement', { changedIndex: this.state.changedIndex, region: this.selectRegion(), lugarActivo: this.state.activo, lugarFinal:this.state.puntoFinal })}>
+						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AfterAchievement', { changedIndex: this.state.changedIndex, region: this.selectRegion(), lugarActivo: this.state.activo, lugarFinal: this.state.puntoFinal, usuarioData:this.state.usuarioData })}>
 							<View style={styles.buttons}>
 								<Text style={styles.buttonText}>Regresar</Text>
 							</View>

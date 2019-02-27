@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, ImageBackground, ScrollView, Dimensions, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import MapViewDirections from 'react-native-maps-directions';
-
+import { database, auth } from '../config/firebase';
 
 class AfterAchievement extends React.Component {
     static navigationOptions = {
@@ -52,17 +51,51 @@ class AfterAchievement extends React.Component {
         },
     }
 
+    componentDidMount() {
+        let usuarioActual = auth.currentUser.uid;
+        let ref = database.ref("usuario/" + usuarioActual);
+        ref.once("value")
+            .then((snapshot) => {
+                this.setState({
+                    usuarioData: snapshot.val(),
+                    usuarioActual,
+                })
+            }).then(success => {
+                let contador = 0
+                this.state.usuarioData.logros3.map(valor => {
+                    if (!valor) {
+                        contador += 1
+                    }
+                })
+                this.setState({
+                    contador
+                })
+            })
+    }
+
     render() {
         const key = this.props.navigation.getParam('changedIndex', 'messi')
         const lugarActivo = this.props.navigation.getParam('lugarActivo', 'rabiot')
         const lugarFinal = this.props.navigation.getParam('lugarFinal', 'rabiot')
         const region = this.props.navigation.getParam('region', 'region1')
+        const distance = (lat1, lon1, lat2, lon2) => {
+            const p = 0.017453292519943295// Math.PI / 180
+            const c = Math.cos
+            const a = 0.5 - c((lat2 - lat1) * p) / 2
+                + c(lat1 * p) * c(lat2 * p)
+                * (1 - c((lon2 - lon1) * p)) / 2
+            const resultado = (12742 * Math.asin(Math.sqrt(a))) * 1000
+            return Math.trunc(resultado)
+        }
+        var texto = ''
+        if(lugarActivo.longitude!==undefined)
+         texto = `Tu Próximo logro Z-TOUR esta a ${distance(lugarActivo.latitude, lugarActivo.longitude, lugarFinal.latitude, lugarFinal.longitude)} Metros de ti.`
 
         onRegionChange = (region) => {
             region = region
         }
 
-        console.log(lugarActivo, lugarFinal);
+        //        console.log(lugarActivo, lugarFinal);
 
         return (
             <ImageBackground
@@ -70,52 +103,67 @@ class AfterAchievement extends React.Component {
                 style={styles.background}
                 resizeMode="cover"
             >
-                <View style={styles.container}>
-                    <View style={styles.ViewiconText}>
-                        <Text style={styles.iconText}>Z-TOUR</Text>
-                    </View>
-                    {!key ?
-                        (<View style={styles.mainTextContainer}>
-                            <View >
-                                <Text style={styles.getStartedText}>¡YA TIENES ESTE LOGRO!</Text>
-                            </View>
-                            <Image style={styles.camStyles} source={require('../assets/icons/rating.png')} />
+                {this.state.usuarioData ?
+                    (<View style={styles.container}>
+                        <View style={styles.ViewiconText}>
+                            <Text style={styles.iconText}>Z-TOUR</Text>
                         </View>
-                        )
-                        :
-                        (<View style={styles.mainTextContainer}>
-                            <Text style={styles.getStartedText}>¡CONSEGUISTE UN LOGRO!</Text>
-                            <View style={styles.estrellas}>
-                                <Image style={styles.camStyles} source={require('../assets/icons/victory.png')} />
+                        {!key ?
+                            (<View style={styles.mainTextContainer}>
+                                <View >
+                                    <Text style={styles.getStartedText}>¡YA TIENES ESTE LOGRO!</Text>
+                                </View>
+                                <Image style={styles.camStyles} source={require('../assets/icons/rating.png')} />
                             </View>
-                            <View styles={styles.container1}>
-                                <MapView
-                                    style={{ width: '100%', height: 200 }}
-                                    region={region}
-                                    onRegionChange={this.onRegionChange}
-                                >
-                                    <Marker
-                                        coordinate={lugarActivo}
-                                    />
-                                    <Marker
-                                        coordinate={lugarFinal}
-                                    />
-                                    <Polyline
-                                        coordinates={[
-                                            lugarActivo,
-                                            lugarFinal,
-                                        ]}
-                                        strokeWidth={2}
-                                        strokeColor="red" />
-                                </MapView>
+                            )
+                            : ((this.state.contador > 0) ?
+                                (<View style={styles.mainTextContainer}>
+                                    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                                        <Text style={styles.getStartedText}>¡CONSEGUISTE UN LOGRO!</Text>
+                                        <View style={styles.estrellas}>
+                                            <Image style={styles.camStyles} source={require('../assets/icons/victory.png')} />
+                                        </View>
+                                        <Text style={styles.getStartedText2}>{texto}</Text>
+                                        <View styles={styles.container1}>
+                                            <MapView
+                                                style={{ width: '100%', height: 200 }}
+                                                region={region}
+                                                onRegionChange={this.onRegionChange}
+                                            >
+                                                <Marker
+                                                    coordinate={lugarActivo}
+                                                />
+                                                <Marker
+                                                    coordinate={lugarFinal}
+                                                    image={require('../assets/icons/lock.png')}
+                                                />
+                                                <Polyline
+                                                    coordinates={[
+                                                        lugarActivo,
+                                                        lugarFinal,
+                                                    ]}
+                                                    strokeWidth={2}
+                                                    strokeColor="red" />
+                                            </MapView>
+                                        </View>
+                                    </ScrollView>
+                                </View>)
+                                :
+                                (<View style={styles.mainTextContainer}>
+                                    <Text style={styles.getStartedText}>¡CONSEGUISTE TU ULTIMO LOGRO!</Text>
+                                    <View style={styles.estrellas}>
+                                        <Image style={styles.camStyles} source={require('../assets/icons/victory.png')} />
+                                    </View>
+                                </View>))}
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('App')}>
+                            <View style={styles.buttons}>
+                                <Text style={styles.buttonText}>Regresar</Text>
                             </View>
-                        </View>)}
-                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('App')}>
-                        <View style={styles.buttons}>
-                            <Text style={styles.buttonText}>Regresar</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
+                        </TouchableWithoutFeedback>
+                    </View>)
+                    :
+                    <View style={styles.activity}><ActivityIndicator size="large" color="white" /></View>
+                }
             </ImageBackground >
         );
     }
@@ -171,18 +219,18 @@ const styles = StyleSheet.create({
         fontSize: 25,
         color: '#ffffff',
     },
+    getStartedText2: {
+        fontSize: 15,
+        color: '#ffffff',
+    },
     mainTextContainer: {
         flex: 1,
         // alignItems: 'center',
-        // justifyContent: 'space-around'
-        borderWidth: 3,
-        borderColor: 'yellow',
+        justifyContent: 'space-around',
         paddingHorizontal: 20,
         paddingVertical: 60,
     },
     estrellas: {
-        borderWidth: 3,
-        borderColor: 'blue',
     },
     background: {
         width: '100%',
@@ -197,5 +245,10 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderWidth: 3,
         borderColor: 'green',
+    },
+    activity: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
