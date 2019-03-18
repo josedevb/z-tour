@@ -114,6 +114,15 @@ class ScanPlace extends React.Component {
 									database.ref().child('usuario/' + usuarioActual)
 										.update({ logros1: newLogros1, logros2: (vm.state.usuarioData.logros2 + 1), });
 								})
+							placesRef.once("value")
+								.then((snapshot) => {
+									this.setState({
+										visitasLocal: snapshot.val(),
+									})
+								}).then(
+									database.ref().child(`achievements/${QRData}`)
+										.update({ visitas: (vm.state.visitasLocal + 1) })
+								)
 						} else {
 							vm.setState({
 								changedIndex: false,
@@ -127,7 +136,7 @@ class ScanPlace extends React.Component {
 	}
 
 	onRegionChange = (region) => {
-		region=region
+		region = region
 	}
 
 	selectRegion = () => {
@@ -236,12 +245,12 @@ class ScanPlace extends React.Component {
 				database.ref().child('usuario/' + userId)
 					.update({ likes: likess, })
 				if (this.state.achievement.likes >= 0) {
-					database.ref().child('achievements/lugar1'+this.state.QRData)
+					database.ref().child('achievements/lugar1' + this.state.QRData)
 						.update({ likes: (this.state.achievement.likes + contador) })
 					vm.setState({ heart: !this.state.heart })
 				}
 			}).then((success) => {
-				var placesRef = database.ref('achievements/'+ this.state.QRData);
+				var placesRef = database.ref('achievements/' + this.state.QRData);
 				let vm = this;
 				placesRef.once('value', function (snapshot) {
 					if (snapshot.val() !== null) {
@@ -265,7 +274,7 @@ class ScanPlace extends React.Component {
 			let latitude2 = staticCoordinate2.latitude
 			let longitude2 = staticCoordinate2.longitude
 			let distanciaa = this.distance(latitude, longitude, latitude2, longitude2)
-			if (distanciaa > 0 && distanciaa < cero && value===false) {
+			if (distanciaa > 0 && distanciaa < cero && value === false) {
 				cero = distanciaa
 				this.setState({
 					puntoFinal: this.selectCoordinate2(index)
@@ -343,7 +352,7 @@ class ScanPlace extends React.Component {
 								</Text>
 							</View>
 						</View>
-						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AfterAchievement', { changedIndex: this.state.changedIndex, region: this.selectRegion(), lugarActivo: this.state.activo, lugarFinal: this.state.puntoFinal, usuarioData:this.state.usuarioData })}>
+						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AfterAchievement', { changedIndex: this.state.changedIndex, region: this.selectRegion(), lugarActivo: this.state.activo, lugarFinal: this.state.puntoFinal, usuarioData: this.state.usuarioData })}>
 							<View style={styles.buttons}>
 								<Text style={styles.buttonText}>Regresar</Text>
 							</View>
