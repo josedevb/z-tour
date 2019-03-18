@@ -14,7 +14,7 @@ import {
 import { auth } from '../config/firebase';
 import InputField from "../components/InputField";
 import { w, h, totalSize } from '../api/Dimensions';
-
+import Firebase from './Firebase';
 const email = require('../assets/icons/email.png');
 
 export default class ForgetPasswordScreen extends React.Component {
@@ -35,7 +35,7 @@ export default class ForgetPasswordScreen extends React.Component {
       if (email !== '') {
         this.sendEmailWithPassword(email);
       } else {
-        console.warn('Enter correct e-mail address');
+        alert('Enter correct e-mail address.')
       }
     });
   };
@@ -43,7 +43,10 @@ export default class ForgetPasswordScreen extends React.Component {
   sendEmailWithPassword = (email) => {
     Firebase.sendEmailWithPassword(email)
       .then(result => {
-        if (result) this.props.navigation.navigate('Auth')();
+        if (result) {
+          alert('Password nuevo enviado al correo.')
+          this.props.navigation.navigate('Auth')();
+        }
       });
   };
 
@@ -74,7 +77,7 @@ export default class ForgetPasswordScreen extends React.Component {
               ref={ref => this.email = ref}
               icon={email}
             />
-            <TouchableWithoutFeedback onPress={()=>this.sendEmail}>
+            <TouchableWithoutFeedback onPress={() => this.sendEmail()}>
               <View style={styles.buttons}>
                 <Text style={styles.buttonText}>Enviar al Correo</Text>
               </View>

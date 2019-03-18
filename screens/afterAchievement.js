@@ -71,6 +71,7 @@ class AfterAchievement extends React.Component {
                     contador
                 })
             })
+
     }
 
     render() {
@@ -88,12 +89,14 @@ class AfterAchievement extends React.Component {
             return Math.trunc(resultado)
         }
         var texto = ''
-        if(lugarActivo.longitude!==undefined)
-         texto = `Tu Próximo logro Z-TOUR esta a ${distance(lugarActivo.latitude, lugarActivo.longitude, lugarFinal.latitude, lugarFinal.longitude)} Metros de ti.`
+        if (lugarActivo.longitude !== undefined)
+            texto = `Tu Próximo logro Z-TOUR esta a ${distance(lugarActivo.latitude, lugarActivo.longitude, lugarFinal.latitude, lugarFinal.longitude)} Metros de ti.`
 
         onRegionChange = (region) => {
             region = region
         }
+
+        console.log(this.state.contador);
 
         //        console.log(lugarActivo, lugarFinal);
 
@@ -116,7 +119,7 @@ class AfterAchievement extends React.Component {
                                 <Image style={styles.camStyles} source={require('../assets/icons/rating.png')} />
                             </View>
                             )
-                            : ((this.state.contador > 0) ?
+                            : (((this.state.contador > 0) && (this.state.contador)) ?
                                 (<View style={styles.mainTextContainer}>
                                     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                                         <Text style={styles.getStartedText}>¡CONSEGUISTE UN LOGRO!</Text>

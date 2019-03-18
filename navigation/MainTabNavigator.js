@@ -72,7 +72,6 @@ prueba.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
   prueba,
 },{
   header: 'none',

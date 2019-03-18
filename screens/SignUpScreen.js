@@ -12,7 +12,6 @@ import {
   Dimensions,
 } from 'react-native';
 import InputField from "../components/InputField";
-import SeleccionarImagen from '../components/SeleccionarImagen'
 import { createFirebaseAccount } from '../config/firebase'
 
 const email = require('../assets/icons/email.png');
@@ -51,8 +50,7 @@ export default class SignUpScreen extends React.Component {
     const name = this.name.getInputValue();
     const lastname = this.lastname.getInputValue();
     const email = this.email.getInputValue();
-    const dni = this.dni.getInputValue();
-    const phone = this.phone.getInputValue();
+
     const password = this.password.getInputValue();
     const repeat = this.repeat.getInputValue();
 
@@ -60,22 +58,20 @@ export default class SignUpScreen extends React.Component {
       isNameCorrect: name === '',
       isLastNameCorrect: lastname === '',
       isEmailCorrect: email === '',
-      isDniCorrect: dni === '',
-      isPhoneCorrect: phone === '',
       isPasswordCorrect: password === '',
       isRepeatCorrect: repeat === '' || repeat !== password,
     }, () => {
       if (name !== '' && email !== '' && password !== '' && (repeat !== '' && repeat === password)) {
-        createFirebaseAccount(email,password, name, lastname,dni, phone)
+        createFirebaseAccount(email,password, name, lastname)
       } else {
         alert('Existen Campos Vacios.');
       }
     })
   };
 
-  createFireBaseAccount = (email,password,name, lastname,dni, phone) => {
+  createFireBaseAccount = (email,password,name, lastname) => {
     this.setState({ isCreatingAccount: true });
-    createFirebaseAccount(email, password,name, lastname,dni, phone )
+    createFirebaseAccount(email, password,name, lastname)
       .then(result => {
         if (result) {
           alert('Exito al crear la Cuenta.')
@@ -104,13 +100,12 @@ export default class SignUpScreen extends React.Component {
               <Text style={styles.iconText}>Z-TOUR</Text>
               <TouchableWithoutFeedback onPress={this.login}>
                 <View style={styles.buttons}>
-                  <Text style={styles.buttonText}>Iniciar Sesion</Text>
+                  <Text style={styles.buttonText}>Regresar</Text>
                 </View>
               </TouchableWithoutFeedback>
             </View>
             <View style={styles.inputsContainer}>
               <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                <SeleccionarImagen />
                 <View style={{ height: 5, }}></View>
                 <InputField
                   placeholder="Nombre"
@@ -140,26 +135,6 @@ export default class SignUpScreen extends React.Component {
                   focus={this.changeInputFocus}
                   ref={ref => this.email = ref}
                   icon={email}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Cédula"
-                  keyboardType='numeric'
-                  error={this.state.isDniCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.dni = ref}
-                  icon={person}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Telefono"
-                  keyboardType='phone-pad'
-                  error={this.state.isPhoneCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.phone = ref}
-                  icon={person}
                 />
                 <View style={{ height: 10, }}></View>
                 <InputField

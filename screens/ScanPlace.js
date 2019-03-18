@@ -57,17 +57,16 @@ class ScanPlace extends React.Component {
 
 	componentDidMount = async () => {
 
-		//const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
-		//this.setState({
-		//	usuarioData,
-		//});
-		//const usuarioActual = this.props.navigation.getParam('usuarioActual', 'cristiano')
+		const usuarioData = this.props.navigation.getParam('usuarioData', 'messi')
+		this.setState({
+			usuarioData,
+		});
+		const usuarioActual = this.props.navigation.getParam('usuarioActual', 'cristiano')
 		const { QRData } = this.props.qrState;
 		this.setState({
 			QRData,
 		})
-		//		var placesRef = database.ref(`achievements/${QRData}`);
-		let usuarioActual = auth.currentUser.uid;
+		var placesRef = database.ref(`achievements/${QRData}`);
 		let ref = database.ref("usuario/" + usuarioActual);
 		ref.once("value")
 			.then((snapshot) => {
@@ -76,7 +75,7 @@ class ScanPlace extends React.Component {
 					usuarioActual,
 				})
 			}).then((success) => {
-				var placesRef = database.ref(`achievements/lugar1`);
+				var placesRef = database.ref(`achievements/${QRData}`);
 				let vm = this;
 				placesRef.once('value', function (snapshot) {
 					if (snapshot.val() !== null) {
@@ -237,12 +236,12 @@ class ScanPlace extends React.Component {
 				database.ref().child('usuario/' + userId)
 					.update({ likes: likess, })
 				if (this.state.achievement.likes >= 0) {
-					database.ref().child('achievements/lugar1' /*+ this.state.QRData*/)
+					database.ref().child('achievements/lugar1'+this.state.QRData)
 						.update({ likes: (this.state.achievement.likes + contador) })
 					vm.setState({ heart: !this.state.heart })
 				}
 			}).then((success) => {
-				var placesRef = database.ref('achievements/lugar1' /*+ this.state.QRData*/);
+				var placesRef = database.ref('achievements/'+ this.state.QRData);
 				let vm = this;
 				placesRef.once('value', function (snapshot) {
 					if (snapshot.val() !== null) {

@@ -15,7 +15,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/ztour.png",
     "splash": {
-      "image": "./assets/images/Turismo_Splash_Screen-min.png",
+      "image": "",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },

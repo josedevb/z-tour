@@ -14,15 +14,13 @@ firebase.initializeApp(firebaseConfig);
 export const database = firebase.database();
 export const auth = firebase.auth();
 
-export const createFirebaseAccount = (email, password, name, lastname, dni, phone) =>
+export const createFirebaseAccount = (email, password, name, lastname) =>
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
             database.ref('usuario/' + user.user.uid).set({
                 name,
                 lastname,
                 email,
-                dni,
-                phone,
                 logros1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 logros2: 0,
                 logros3: [false, false, false, false, false, false, false, false, false, false],
