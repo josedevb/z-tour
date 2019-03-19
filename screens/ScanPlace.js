@@ -114,15 +114,6 @@ class ScanPlace extends React.Component {
 									database.ref().child('usuario/' + usuarioActual)
 										.update({ logros1: newLogros1, logros2: (vm.state.usuarioData.logros2 + 1), });
 								})
-							placesRef.once("value")
-								.then((snapshot) => {
-									this.setState({
-										visitasLocal: snapshot.val(),
-									})
-								}).then(
-									database.ref().child(`achievements/${QRData}`)
-										.update({ visitas: (vm.state.visitasLocal + 1) })
-								)
 						} else {
 							vm.setState({
 								changedIndex: false,
@@ -245,7 +236,7 @@ class ScanPlace extends React.Component {
 				database.ref().child('usuario/' + userId)
 					.update({ likes: likess, })
 				if (this.state.achievement.likes >= 0) {
-					database.ref().child('achievements/lugar1' + this.state.QRData)
+					database.ref().child('achievements/' + this.state.QRData)
 						.update({ likes: (this.state.achievement.likes + contador) })
 					vm.setState({ heart: !this.state.heart })
 				}

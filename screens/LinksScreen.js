@@ -71,14 +71,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[1] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Calle Carabobo de El Saladillo.
                   </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[1] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -93,14 +93,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[2] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             El Convento de San Francisco de Asís.
                   </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[2] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -115,14 +115,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[3] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Iglesia de Santa Lucía.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[3] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -137,14 +137,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[4] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             La casa de la Capitulación.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[4] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -159,14 +159,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[5] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Parque Vereda del Lago.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[5] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -181,14 +181,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[6] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Plaza del Buen Maestro.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[6] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -203,14 +203,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[7] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Plaza y Monumento a la Chinita.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[7] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -225,14 +225,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[8] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Puente General Rafael Urdaneta.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[8] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
@@ -247,14 +247,14 @@ export default class AchievementScreen extends React.Component {
                       style={styles.background2}
                       resizeMode="cover"
                     >
-                      <View style={this.state.getDataBase1.logros3[0] ? styles.opacity2 : styles.opacity1}>
+                      <View style={this.state.getDataBase1.logros3[9] ? styles.opacity2 : styles.opacity1}>
                         <View>
                           <Text style={styles.texto}>
                             Estadio José Encarnación Romero.
                      </Text>
                         </View>
                         <View>
-                          {this.state.getDataBase1.logros3[0] ?
+                          {this.state.getDataBase1.logros3[9] ?
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-relleno-480.png')} />
                             :
                             <Image style={styles.starImages} style={{ width: 25, height: 25 }} source={require('../assets/images/icons8-estrella-480.png')} />
