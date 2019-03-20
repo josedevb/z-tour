@@ -74,11 +74,9 @@ class AfterAchievement extends React.Component {
 
     }
 
-    render() {
-        const key = this.props.navigation.getParam('changedIndex', 'messi')
+    mostrar = () => {
         const lugarActivo = this.props.navigation.getParam('lugarActivo', 'rabiot')
         const lugarFinal = this.props.navigation.getParam('lugarFinal', 'rabiot')
-        const region = this.props.navigation.getParam('region', 'region1')
         const distance = (lat1, lon1, lat2, lon2) => {
             const p = 0.017453292519943295// Math.PI / 180
             const c = Math.cos
@@ -90,16 +88,18 @@ class AfterAchievement extends React.Component {
         }
         var texto = ''
         if (lugarActivo.longitude !== undefined)
-            texto = `Tu Próximo logro Z-TOUR esta a ${distance(lugarActivo.latitude, lugarActivo.longitude, lugarFinal.latitude, lugarFinal.longitude)} Metros de ti.`
+            return `Tu Próximo logro Z-TOUR esta a ${distance(lugarActivo.latitude, lugarActivo.longitude, lugarFinal.latitude, lugarFinal.longitude)} Metros de ti.`
+    }
 
+
+    render() {
+        const lugarActivo = this.props.navigation.getParam('lugarActivo', 'rabiot')
+        const lugarFinal = this.props.navigation.getParam('lugarFinal', 'rabiot')
+        const key = this.props.navigation.getParam('changedIndex', 'messi')
+        const region = this.props.navigation.getParam('region', 'region1')
         onRegionChange = (region) => {
             region = region
         }
-
-        console.log(this.state.contador);
-
-        //        console.log(lugarActivo, lugarFinal);
-
         return (
             <ImageBackground
                 source={require('../assets/icons/home.png')}
@@ -126,7 +126,7 @@ class AfterAchievement extends React.Component {
                                         <View style={styles.estrellas}>
                                             <Image style={styles.camStyles} source={require('../assets/icons/victory.png')} />
                                         </View>
-                                        <Text style={styles.getStartedText2}>{texto}</Text>
+                                        <Text style={styles.getStartedText2}>{this.mostrar()}</Text>
                                         <View styles={styles.container1}>
                                             <MapView
                                                 style={{ width: '100%', height: 200 }}
