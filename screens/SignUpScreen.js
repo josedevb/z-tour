@@ -10,9 +10,11 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import InputField from "../components/InputField";
 import { createFirebaseAccount } from '../config/firebase'
+import { isLoading } from 'expo-font';
 
 const email = require('../assets/icons/email.png');
 const password = require('../assets/icons/password.png');
@@ -47,6 +49,7 @@ export default class SignUpScreen extends React.Component {
   login = () => this.props.navigation.navigate('Auth')
 
   createUserAccount = () => {
+    this.setState({ loading: true });
     const name = this.name.getInputValue();
     const lastname = this.lastname.getInputValue();
     const email = this.email.getInputValue();
@@ -61,17 +64,21 @@ export default class SignUpScreen extends React.Component {
       isPasswordCorrect: password === '',
       isRepeatCorrect: repeat === '' || repeat !== password,
     }, () => {
-      if (name !== '' && email !== '' && password !== '' && (repeat !== '' && repeat === password)) {
-        createFirebaseAccount(email,password, name, lastname)
+      if (name !== '' && email !== '' && password !== '' && repeat !== '') {
+        if (repeat !== password)
+          { this.setState({ loading: false });
+            alert('Las contraseñas no coinciden.')}
+            else{ createFirebaseAccount(email, password, name, lastname)}
       } else {
+        this.setState({ loading: false });
         alert('Existen Campos Vacios.');
       }
     })
   };
 
-  createFireBaseAccount = (email,password,name, lastname) => {
+  createFireBaseAccount = (email, password, name, lastname) => {
     this.setState({ isCreatingAccount: true });
-    createFirebaseAccount(email, password,name, lastname)
+    createFirebaseAccount(email, password, name, lastname)
       .then(result => {
         if (result) {
           alert('Exito al crear la Cuenta.')
@@ -95,74 +102,78 @@ export default class SignUpScreen extends React.Component {
           style={styles.background}
           resizeMode="cover"
         >
-          <View style={styles.container}>
-            <View style={styles.ViewiconText}>
-              <Text style={styles.iconText}>Z-TOUR</Text>
-              <TouchableWithoutFeedback onPress={this.login}>
-                <View style={styles.buttons}>
-                  <Text style={styles.buttonText}>Regresar</Text>
-                </View>
-              </TouchableWithoutFeedback>
+          {this.state.loading ?
+            <View style={styles.activity}><ActivityIndicator size="large" color="white" /></View>
+            :
+            <View style={styles.container}>
+              <View style={styles.ViewiconText}>
+                <Text style={styles.iconText}>Z-TOUR</Text>
+              </View>
+              <View style={styles.inputsContainer}>
+                <TouchableWithoutFeedback onPress={this.login}>
+                  <View style={styles.buttons}>
+                    <Text style={styles.buttonText}>Regresar</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                  <View style={{ height: 5, }}></View>
+                  <InputField
+                    placeholder="Nombre"
+                    autoCapitalize="words"
+                    error={this.state.isNameCorrect}
+                    style={styles.input}
+                    focus={this.changeInputFocus}
+                    ref={ref => this.name = ref}
+                    icon={person}
+                  />
+                  <View style={{ height: 10, }}></View>
+                  <InputField
+                    placeholder="Apellido"
+                    autoCapitalize="words"
+                    error={this.state.isLastNameCorrect}
+                    style={styles.input}
+                    focus={this.changeInputFocus}
+                    ref={ref => this.lastname = ref}
+                    icon={person}
+                  />
+                  <View style={{ height: 10, }}></View>
+                  <InputField
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    error={this.state.isEmailCorrect}
+                    style={styles.input}
+                    focus={this.changeInputFocus}
+                    ref={ref => this.email = ref}
+                    icon={email}
+                  />
+                  <View style={{ height: 10, }}></View>
+                  <InputField
+                    placeholder="Password"
+                    error={this.state.isPasswordCorrect}
+                    style={styles.input}
+                    focus={this.changeInputFocus}
+                    ref={ref => this.password = ref}
+                    secureTextEntry={true}
+                    icon={password}
+                  />
+                  <View style={{ height: 10, }}></View>
+                  <InputField
+                    placeholder="Repeat Password"
+                    error={this.state.isRepeatCorrect}
+                    style={styles.input}
+                    secureTextEntry={true}
+                    returnKeyType="done"
+                    blurOnSubmit={true}
+                    focus={this.changeInputFocus}
+                    ref={ref => this.repeat = ref}
+                    icon={repeat}
+                  />
+                  <View style={{ height: 10, }}></View>
+                </ScrollView>
+              </View>
+              <Button onPress={this.createUserAccount} title="REGISTRARSE" color="black" />
             </View>
-            <View style={styles.inputsContainer}>
-              <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                <View style={{ height: 5, }}></View>
-                <InputField
-                  placeholder="Nombre"
-                  autoCapitalize="words"
-                  error={this.state.isNameCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.name = ref}
-                  icon={person}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Apellido"
-                  autoCapitalize="words"
-                  error={this.state.isLastNameCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.lastname = ref}
-                  icon={person}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  error={this.state.isEmailCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.email = ref}
-                  icon={email}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Password"
-                  error={this.state.isPasswordCorrect}
-                  style={styles.input}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.password = ref}
-                  secureTextEntry={true}
-                  icon={password}
-                />
-                <View style={{ height: 10, }}></View>
-                <InputField
-                  placeholder="Repeat Password"
-                  error={this.state.isRepeatCorrect}
-                  style={styles.input}
-                  secureTextEntry={true}
-                  returnKeyType="done"
-                  blurOnSubmit={true}
-                  focus={this.changeInputFocus}
-                  ref={ref => this.repeat = ref}
-                  icon={repeat}
-                />
-                <View style={{ height: 10, }}></View>
-              </ScrollView>
-            </View>
-            <Button onPress={this.createUserAccount} title="REGISTRARSE" color="black" />
-          </View>
+          }
         </ImageBackground>
       </KeyboardAvoidingView>
     );
@@ -239,5 +250,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: Dimensions.get('window').width <= 360 ? 15 : 20,
+  },
+  activity: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

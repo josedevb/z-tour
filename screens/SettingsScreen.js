@@ -43,9 +43,6 @@ export default class SettingsScreen extends React.Component {
                         Basílica de Nuestra Señora de Chiquinquirá:
                       </Text>
                       <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar1.visitas}
-                      </Text>
-                      <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar1.likes}
                       </Text>
                     </View>
@@ -53,9 +50,6 @@ export default class SettingsScreen extends React.Component {
                       <Text style={styles.texto}>
                         Calle Carabobo de El Saladillo:
              </Text>
-                      <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar2.visitas}
-                      </Text>
                       <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar2.likes}
                       </Text>
@@ -65,9 +59,6 @@ export default class SettingsScreen extends React.Component {
                         El Convento de San Francisco de Asís:
                   </Text>
                       <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar3.visitas}
-                      </Text>
-                      <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar3.likes}
                       </Text>
                     </View>
@@ -75,9 +66,6 @@ export default class SettingsScreen extends React.Component {
                       <Text style={styles.texto}>
                         Iglesia de Santa Lucía:
                   </Text>
-                      <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar4.visitas}
-                      </Text>
                       <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar4.likes}
                       </Text>
@@ -87,9 +75,6 @@ export default class SettingsScreen extends React.Component {
                         La casa de la Capitulación:
                   </Text>
                       <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar5.visitas}
-                      </Text>
-                      <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar5.likes}
                       </Text>
                     </View>
@@ -97,9 +82,6 @@ export default class SettingsScreen extends React.Component {
                       <Text style={styles.texto}>
                         Parque Vereda del Lago:
                   </Text>
-                      <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar6.visitas}
-                      </Text>
                       <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar6.likes}
                       </Text>
@@ -109,9 +91,6 @@ export default class SettingsScreen extends React.Component {
                         Plaza del Buen Maestro:
                   </Text>
                       <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar7.visitas}
-                      </Text>
-                      <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar7.likes}
                       </Text>
                     </View>
@@ -119,9 +98,6 @@ export default class SettingsScreen extends React.Component {
                       <Text style={styles.texto}>
                         Plaza y Monumento a la Chinita.
                   </Text>
-                      <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar8.visitas}
-                      </Text>
                       <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar8.likes}
                       </Text>
@@ -131,9 +107,6 @@ export default class SettingsScreen extends React.Component {
                         Puente General Rafael Urdaneta:
                   </Text>
                       <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar9.visitas}
-                      </Text>
-                      <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar9.likes}
                       </Text>
                     </View>
@@ -141,9 +114,6 @@ export default class SettingsScreen extends React.Component {
                       <Text style={styles.texto}>
                         Estadio José Encarnación Romero:
                   </Text>
-                      <Text style={styles.texto2}>
-                        Visitas: {this.state.achievements.lugar10.visitas}
-                      </Text>
                       <Text style={styles.texto2}>
                         Likes: {this.state.achievements.lugar10.likes}
                       </Text>

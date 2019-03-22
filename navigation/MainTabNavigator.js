@@ -63,7 +63,7 @@ prueba.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-user' : 'md-person'}
+      name={Platform.OS === 'ios' ? 'ios-user' : 'md-clipboard'}
     />
   ),
 };
