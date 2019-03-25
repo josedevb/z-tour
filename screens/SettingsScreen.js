@@ -1,6 +1,7 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, Image, Text, ImageBackground, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, View, Button, Text, ImageBackground, ActivityIndicator,Image } from 'react-native';
 import { auth, database } from '../config/firebase';
+import InputField from "../components/InputField";
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -9,20 +10,48 @@ export default class SettingsScreen extends React.Component {
   };
 
   state = {
-    achievements: null,
+    motivo: '',
+    mensaje: '',
+    motivoCorrect: false,
+    mensajeCorrect: false,
+    loading: true,
   }
 
-  componentDidMount() {
+  contactForm = () => {
+    this.setState({ loading: false });
     let userId = auth.currentUser.uid;
-    let ref = database.ref("achievements");
-    ref.once("value")
-      .then((snapshot) => {
-        this.setState({
-          achievements: snapshot.val(),
-        })
-      })
-    console.log(this.state);
+    const motivo = this.motivo.getInputValue();
+    const mensaje = this.mensaje.getInputValue();
+
+    this.setState({
+      motivoCorrect: motivo === '',
+      mensajeCorrect: mensaje === '',
+    }, () => {
+      if (motivo !== '' && mensaje !== '') {
+        const data = {
+          'userId': userId,
+          'motivo': motivo,
+          'mensaje': mensaje,
+        };
+        this.saveContactForm(data);
+      } else {
+        this.setState({ loading: true });
+        alert('Existen Campos Vacios.');
+      }
+    })
   }
+
+  saveContactForm = (data) => {
+    database.ref('MensajesUsuarios').push(data) // Hacemos referencia al método database de el SDK y hacemos referencia el nombre del objeto que contendrá nuestros registros y empujamos los nuevos envios de datos
+      .then(function () {
+        alert('mensaje enviado.'); 
+        this.setState({ loading: true });// Si la petición es correcta y almaceno los datos mostramos un mensaje al usuario.
+      })
+      .catch(function () {
+        alert('mensaje No enviado.'); 
+        this.setState({ loading: true });// En caso de ocurrir un error le mostramos al usuario que ocurrió un error.
+      });
+  };
 
   render() {
     return (
@@ -32,94 +61,33 @@ export default class SettingsScreen extends React.Component {
         resizeMode="cover"
       >
         <View style={styles.container}>
-          {this.state.achievements ?
+          {this.state.loading ?
             (
-              <View>
-                <Text style={styles.getStartedText}>INFORMACION:</Text>
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+              <View styles={styles.principal}>
+                <Text style={styles.getStartedText}>Contáctanos:</Text>
+                <View style={{ height: 20, }}></View>
+                <Image style={styles.camStyles} source={require('../assets/icons/paper-plane.png')} />
                   <View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Basílica de Nuestra Señora de Chiquinquirá:
-                      </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar1.likes}
-                      </Text>
+                      <InputField
+                        placeholder="Motivo del Mensaje"
+                        autoCapitalize="words"
+                        error={this.state.motivoCorrect}
+                        style={styles.input}
+                        focus={this.changeInputFocus}
+                        ref={ref => this.motivo = ref}
+                      />
+                      <View style={{ height: 10, }}></View>
+                      <InputField
+                        placeholder="Mensaje..."
+                        autoCapitalize="words"
+                        error={this.state.mensajeCorrect}
+                        style={styles.input}
+                        focus={this.changeInputFocus}
+                        ref={ref => this.mensaje = ref}
+                      />
                     </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Calle Carabobo de El Saladillo:
-             </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar2.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        El Convento de San Francisco de Asís:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar3.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Iglesia de Santa Lucía:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar4.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        La casa de la Capitulación:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar5.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Parque Vereda del Lago:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar6.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Plaza del Buen Maestro:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar7.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Plaza y Monumento a la Chinita.
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar8.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Puente General Rafael Urdaneta:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar9.likes}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.texto}>
-                        Estadio José Encarnación Romero:
-                  </Text>
-                      <Text style={styles.texto2}>
-                        Likes: {this.state.achievements.lugar10.likes}
-                      </Text>
-                    </View>
-                  </View>
-                </ScrollView>
+                    <View style={{ height: 20, }}></View>
+                <Button onPress={this.contactForm} title="Enviar Mensaje" color="black" />
               </View>)
             : <View style={styles.activity}><ActivityIndicator size="large" color="white" /></View>}
         </View>
@@ -133,13 +101,15 @@ export default class SettingsScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+    justifyContent: 'space-around',
     backgroundColor: '#171F33',
     opacity: 0.8,
-    paddingVertical: 80,
-    paddingHorizontal: 50,
+  },
+  principal: {
     justifyContent: 'space-around',
   },
-
   cuadroLogros1: {
     borderWidth: 1,
     borderColor: '#ffffff',
@@ -201,4 +171,8 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 5, height: 5 },
     textShadowRadius: 10,
   },
+  camStyles: {
+    width: 150,
+    height: 150,
+},
 });
